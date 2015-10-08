@@ -41,3 +41,14 @@ xyz0 = [1, 1, 1]
 t=np.linspace(0, 10, N_steps+1)
 
 n=1
+solver = ode(f)
+solver.set_integrator('dopri5', atol=1E-6, rtol=1E-4)
+solver.set_initial_value(xyz0)
+while solver.successful() and solver.t < tf and n<=N_steps:
+    solver.integrate(solver.t+dt)
+    t[n] = solver.t
+    x[n] = solver.y[0]
+    y[n] = solver.y[1]
+    z[n] = solver.y[2]
+    n+=1
+
