@@ -26,9 +26,12 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def f(t, xyz):
-    dx = 10.0 * (xyz[1] - xyz[0])
-    dy = xyz[0] * (28.0 - xyz[2]) - xyz[1]
-    dz = xyz[0] * xyz[1] - 8.0/3.0 * xyz[2]
+    sigma=10.0
+    beta=8.0/3.0
+    rho=28.0
+    dx = sigma * (xyz[1] - xyz[0])
+    dy = xyz[0] * (rho - xyz[2]) - xyz[1]
+    dz = xyz[0] * xyz[1] - beta * xyz[2]
     return [dx, dy, dz]
 
 tf = 100.
@@ -40,17 +43,17 @@ z=np.zeros(N_steps+1)
 xyz_inicial = [1, 1, 1]
 t=np.linspace(0, 10, N_steps+1)
 
-n=1
+nc=1
 solver = ode(f)
 solver.set_integrator('dopri5', atol=1E-6, rtol=1E-4)
 solver.set_initial_value(xyz_inicial)
-while solver.successful() and solver.t < tf and n<=N_steps:
+while solver.successful() and solver.t < tf and nc<=N_steps:
     solver.integrate(solver.t+h)
-    t[n] = solver.t
-    x[n] = solver.y[0]
-    y[n] = solver.y[1]
-    z[n] = solver.y[2]
-    n+=1
+    t[nc] = solver.t
+    x[nc] = solver.y[0]
+    y[nc] = solver.y[1]
+    z[nc] = solver.y[2]
+    nc+=1
 
 fig = plt.figure(1,figsize=(8,6))
 fig.clf()
